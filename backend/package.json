@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/genai": "^1.46.0",
+    "@google/generative-ai": "^0.24.1",
+    "@supabase/supabase-js": "^2.99.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mammoth": "^1.11.0",
+    "multer": "^2.1.1",
+    "openai": "^6.32.0",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^5.5.207"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
