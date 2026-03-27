@@ -1,3 +1,5 @@
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export async function analyzeResume(
   file: File,
   jobDescription?: string | null
@@ -9,7 +11,7 @@ export async function analyzeResume(
     formData.append("jobDescription", jobDescription);
   }
 
-  const res = await fetch("http://localhost:5050/api/analyze", {
+  const res = await fetch(`${BASE_URL}/api/analyze`, {
     method: "POST",
     body: formData,
   });

@@ -91,14 +91,16 @@ export default function ResumeHistoryCard({ analysis, previousScore }: Props) {
 
             {/* Quick score pills */}
             <div className="mt-3 flex flex-wrap gap-1.5">
-              {analysis.sectionFeedback.slice(0, 3).map((sf) => {
-                const sectionScore = {
+              {(analysis.sectionFeedback as any[]).slice(0, 3).map((sf: any) => {
+                const sectionScoreMap: any = {
                   "Professional Summary": 55,
                   "Work Experience": 82,
-                  Skills: 71,
-                  Projects: 60,
-                  Education: 88,
-                }[sf.section] ?? 65;
+                  "Skills": 71,
+                  "Projects": 60,
+                  "Education": 88,
+                };
+
+                const sectionScore = sectionScoreMap[sf.section] ?? 65;
 
                 return (
                   <span
