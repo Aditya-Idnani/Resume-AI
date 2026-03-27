@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { FileText, Calendar, ArrowUpRight, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import {
+  FileText,
+  Calendar,
+  ArrowUpRight,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+} from "lucide-react";
 import { formatDate, getScoreColor, getScoreBg } from "@/lib/utils";
 import { ResumeAnalysis } from "@/context/AppContext";
 import ScoreCircle from "./ScoreCircle";
@@ -11,13 +18,24 @@ interface Props {
   previousScore?: number;
 }
 
-export default function ResumeHistoryCard({ analysis, previousScore }: Props) {
-  const scoreDiff = previousScore !== undefined ? analysis.atsScore - previousScore : null;
+// ✅ Proper type defined OUTSIDE component
+type SectionFeedback = {
+  section: string;
+  score?: number;
+};
 
-  type SectionFeedback = {
-    section: string;
-    score?: number;
-  };
+export default function ResumeHistoryCard({
+  analysis,
+  previousScore,
+}: Props) {
+  const scoreDiff =
+    previousScore !== undefined
+      ? analysis.atsScore - previousScore
+      : null;
+
+  // ✅ fallback safe array (VERY IMPORTANT)
+  const sectionFeedback: SectionFeedback[] =
+    (analysis.sectionFeedback as SectionFeedback[]) || [];
 
   return (
     <Link
@@ -94,25 +112,25 @@ export default function ResumeHistoryCard({ analysis, previousScore }: Props) {
               </div>
             </div>
 
-              {/* Quick score pills */}
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {(analysis.sectionFeedback as SectionFeedback[])
-                .slice(0, 3)
-                .map((sf) => {
-                              const scores: Record<string, number> = {
-                "Professional Summary": 55,
-                "Work Experience": 82,
-                Skills: 71,
-                Projects: 60,
-                Education: 88,
-              };
+            {/* ✅ Quick score pills (FIXED) */}
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {sectionFeedback.slice(0, 3).map((sf) => {
+                const scores: Record<string, number> = {
+                  "Professional Summary": 55,
+                  "Work Experience": 82,
+                  Skills: 71,
+                  Projects: 60,
+                  Education: 88,
+                };
 
-              const sectionScore = scores[sf.section] ?? 65;
+                const sectionScore = scores[sf.section] ?? 65;
 
                 return (
                   <span
                     key={sf.section}
-                    className={`px-2 py-0.5 text-[10px] font-medium rounded-md border ${getScoreBg(sectionScore)} ${getScoreColor(sectionScore)}`}
+                    className={`px-2 py-0.5 text-[10px] font-medium rounded-md border ${getScoreBg(
+                      sectionScore
+                    )} ${getScoreColor(sectionScore)}`}
                   >
                     {sf.section}: {sectionScore}%
                   </span>
