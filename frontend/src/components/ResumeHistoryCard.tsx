@@ -18,7 +18,7 @@ interface Props {
   previousScore?: number;
 }
 
-// ✅ Proper type defined OUTSIDE component
+// ✅ Type defined outside
 type SectionFeedback = {
   section: string;
   score?: number;
@@ -33,7 +33,7 @@ export default function ResumeHistoryCard({
       ? analysis.atsScore - previousScore
       : null;
 
-  // ✅ fallback safe array (VERY IMPORTANT)
+  // ✅ Correct data source
   const sectionFeedback: SectionFeedback[] =
     (analysis.sectionFeedback as SectionFeedback[]) || [];
 
@@ -42,7 +42,7 @@ export default function ResumeHistoryCard({
       href={`/dashboard/analysis/${analysis.id}`}
       className="group block bg-white rounded-xl border border-stone-200 hover:border-amber-200 hover:shadow-md transition-all duration-200 overflow-hidden"
     >
-      {/* Color accent top bar */}
+      {/* Top color bar */}
       <div
         className="h-1 w-full"
         style={{
@@ -67,7 +67,7 @@ export default function ResumeHistoryCard({
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <FileText className="w-3.5 h-3.5 text-stone-400 flex-shrink-0" />
+                  <FileText className="w-3.5 h-3.5 text-stone-400" />
                   <h3 className="text-sm font-semibold text-stone-900 truncate">
                     {analysis.fileName}
                   </h3>
@@ -81,7 +81,7 @@ export default function ResumeHistoryCard({
                     </span>
                   </div>
 
-                  {/* Score change indicator */}
+                  {/* Score diff */}
                   {scoreDiff !== null && (
                     <div
                       className={`flex items-center gap-0.5 text-xs font-medium ${
@@ -106,13 +106,13 @@ export default function ResumeHistoryCard({
               </div>
 
               {/* CTA */}
-              <div className="flex items-center gap-1.5 text-xs font-medium text-amber-600 group-hover:text-amber-700 flex-shrink-0 pt-0.5">
+              <div className="flex items-center gap-1.5 text-xs font-medium text-amber-600 group-hover:text-amber-700">
                 <span className="hidden sm:inline">View analysis</span>
                 <ArrowUpRight className="w-4 h-4" />
               </div>
             </div>
 
-            {/* ✅ Quick score pills (FIXED) */}
+            {/* ✅ FIXED MAP (MAIN BUG SOLVED) */}
             <div className="mt-3 flex flex-wrap gap-1.5">
               {sectionFeedback.slice(0, 3).map((sf) => {
                 const scores: Record<string, number> = {
