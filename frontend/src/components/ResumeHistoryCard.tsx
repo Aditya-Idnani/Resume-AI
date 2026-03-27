@@ -14,6 +14,11 @@ interface Props {
 export default function ResumeHistoryCard({ analysis, previousScore }: Props) {
   const scoreDiff = previousScore !== undefined ? analysis.atsScore - previousScore : null;
 
+  type SectionFeedback = {
+    section: string;
+    score?: number;
+  };
+
   return (
     <Link
       href={`/dashboard/analysis/${analysis.id}`}
@@ -89,18 +94,20 @@ export default function ResumeHistoryCard({ analysis, previousScore }: Props) {
               </div>
             </div>
 
-            {/* Quick score pills */}
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {(analysis.sectionFeedback as any[]).slice(0, 3).map((sf: any) => {
-                const sectionScoreMap: any = {
-                  "Professional Summary": 55,
-                  "Work Experience": 82,
-                  "Skills": 71,
-                  "Projects": 60,
-                  "Education": 88,
-                };
+              {/* Quick score pills */}
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {(analysis.sectionFeedback as SectionFeedback[])
+                .slice(0, 3)
+                .map((sf) => {
+                              const scores: Record<string, number> = {
+                "Professional Summary": 55,
+                "Work Experience": 82,
+                Skills: 71,
+                Projects: 60,
+                Education: 88,
+              };
 
-                const sectionScore = sectionScoreMap[sf.section] ?? 65;
+              const sectionScore = scores[sf.section] ?? 65;
 
                 return (
                   <span
