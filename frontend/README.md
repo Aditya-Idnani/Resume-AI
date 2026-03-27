@@ -1,40 +1,97 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ResumeAI
 
-## Getting Started
+ResumeAI is a full-stack web application that helps users analyze and improve their resumes using AI.
+It focuses on giving simple ATS-based feedback and suggestions that can actually help in placements.
 
-First, run the development server:
+---
 
-```bash
+## What this project does
+
+* Upload a resume and get an **ATS compatibility score**
+* See which **keywords are matched or missing**
+* Get **AI-based suggestions** to improve your resume
+* Improve individual **resume bullet points** using AI
+
+---
+
+## Features
+
+* ATS score analysis
+* Keyword matching (matched / missing / recommended)
+* Strengths and weaknesses detection
+* AI-generated improvement suggestions
+* Bullet point improvement using Gemini AI
+
+---
+
+## Tech Stack
+
+**Frontend**
+
+* Next.js
+* TypeScript
+
+**Backend**
+
+* Node.js
+* Express
+
+**AI**
+
+* Google Gemini API
+
+---
+
+## How to run locally
+
+### Backend
+
+bash
+cd backend
+npm install
+
+
+Create a `.env` file:
+
+GEMINI_API_KEY=your_api_key
+PORT=5050
+
+
+Run:
+
+bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Frontend
 
-## Learn More
+bash
+cd frontend
+npm install
+npm run dev
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Notes
 
-## Deploy on Vercel
+* `.env` file is not included for security reasons
+* Make sure to use your own Gemini API key
+* This project was built as a learning project while exploring full-stack + AI integration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# AI-Resume-Analyzer
->>>>>>> 522e4587c0b330a0e89ac6ae2a3d13e2fd964eb4
+## Future Improvements
+
+* Better resume parsing
+* More accurate ATS scoring
+* Authentication system
+* Resume history
+
+---
+
+## Author
+
+Aditya Idnani
