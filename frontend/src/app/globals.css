@@ -9,6 +9,8 @@
   --primary-dark: #D97706;
   --primary-light: #FEF3C7;
   --muted: #78716C;
+  --font-geist-sans: "Avenir Next", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-geist-mono: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 @theme inline {

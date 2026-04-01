@@ -1,4 +1,13 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const RAW_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
+
+function getAnalyzeEndpoint() {
+  const normalizedBase = RAW_BASE_URL.replace(/\/+$/, "");
+  const withApiPrefix = normalizedBase.endsWith("/api")
+    ? normalizedBase
+    : `${normalizedBase}/api`;
+
+  return `${withApiPrefix}/analyze`;
+}
 
 export async function analyzeResume(
   file: File,
@@ -11,7 +20,7 @@ export async function analyzeResume(
     formData.append("jobDescription", jobDescription);
   }
 
-  const res = await fetch(`${BASE_URL}/api/analyze`, {
+  const res = await fetch(getAnalyzeEndpoint(), {
     method: "POST",
     body: formData,
   });
