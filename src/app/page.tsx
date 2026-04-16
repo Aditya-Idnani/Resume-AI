@@ -6,6 +6,9 @@ import HeroUpload from "@/components/HeroUpload";
 import TrustSection from "@/components/TrustSection";
 import ATSPreviewCard from "@/components/ATSPreviewCard";
 import JobDescriptionAnalyzer from "@/components/JobDescriptionAnalyzer";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import {
   FileText,
   Target,
@@ -85,6 +88,27 @@ const steps = [
 ];
 
 export default function LandingPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        router.push("/dashboard/upload");
+      }
+    };
+
+    checkSession();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        router.push("/dashboard/upload");
+      }
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, [router]);
+
   return (
     <div className="min-h-screen bg-[#FAFAF8]">
       <Navbar />
