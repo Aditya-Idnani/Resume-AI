@@ -1,7 +1,12 @@
-const RAW_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
+const RAW_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 function getAnalyzeEndpoint() {
+  if (!RAW_BASE_URL) {
+    throw new Error("NEXT_PUBLIC_API_URL is not defined");
+  }
+
   const normalizedBase = RAW_BASE_URL.replace(/\/+$/, "");
+
   const withApiPrefix = normalizedBase.endsWith("/api")
     ? normalizedBase
     : `${normalizedBase}/api`;
