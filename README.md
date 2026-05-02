@@ -8,12 +8,12 @@ Built as a student project to explore real-world full-stack + AI integration.
 
 ## ✨ Features
 
-- 📄 Upload resume and get ATS score
-- 📊 Section-wise analysis (Skills, Experience, etc.)
-- 🔍 Keyword matching (matched / missing)
-- 🤖 AI suggestions using Gemini API
-- ✏️ Bullet point improvement
-- 📈 Resume history tracking (if enabled)
+- Upload resume and get ATS score  
+- Section-wise analysis (Skills, Experience, etc.)  
+- Keyword matching (matched / missing)  
+- AI suggestions using Gemini API  
+- Bullet point improvement  
+- Resume history tracking  
 
 ---
 
@@ -37,24 +37,27 @@ Built as a student project to explore real-world full-stack + AI integration.
 ---
 
 ## 📁 Project Structure
+
 Resume-AI/
-├── frontend/ # Next.js app
-├── backend/ # Express API
+├── frontend/   # Next.js app  
+├── backend/    # Express API  
 
 ---
 
 ## ⚙️ Environment Variables
 
-### Frontend (`.env.local`)
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-NEXT_PUBLIC_API_URL=
+### Frontend (.env.local)
+
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url  
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key  
+NEXT_PUBLIC_API_URL=your_backend_url  
 
 ---
 
-### Backend (`.env`)
-GEMINI_API_KEY=
-PORT=5050
+### Backend (.env)
+
+GEMINI_API_KEY=your_gemini_api_key  
+PORT=5050  
 
 ---
 
@@ -62,31 +65,45 @@ PORT=5050
 
 ### Backend
 
-```bash
-cd backend
-npm install
-npm run dev
+cd backend  
+npm install  
+npm run dev  
+
+---
 
 ### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
 
-🚀 Deployment
-Frontend → Vercel
-Backend → Render / Railway
+cd frontend  
+npm install  
+npm run dev  
 
-⚠️ Notes
-.env files are excluded for security
-Use your own Gemini API key
-Backend must be deployed before frontend works in production
-🔮 Future Improvements
-Authentication (Login system)
-Resume storage
-Better ATS scoring logic
-Multi-job comparison
-Export improved resume
-👨‍💻 Author
+---
+
+## 🚀 Deployment
+
+Frontend → Vercel  
+Backend → Render / Railway  
+
+---
+
+## ⚠️ Notes
+
+- .env files are excluded for security  
+- Use your own Gemini API key  
+- Backend must be deployed before frontend works in production  
+
+---
+
+## 🔮 Future Improvements
+
+- Authentication (Login system)  
+- Resume storage  
+- Better ATS scoring logic  
+- Multi-job comparison  
+- Export improved resume  
+
+---
+
+## 👨‍💻 Author
 
 Aditya Idnani
