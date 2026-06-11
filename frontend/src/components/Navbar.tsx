@@ -33,18 +33,12 @@ export default function Navbar() {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-2">
-            <Link
-              href="/login"
-              className="px-4 py-2 text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg"
-            >
-              Log in
-            </Link>
-            <Link
-              href="/signup"
+            <a
+              href="#analyzer"
               className="px-4 py-2 text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 rounded-lg shadow-sm"
             >
-              Get started
-            </Link>
+              Analyze Resume
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -63,12 +57,9 @@ export default function Navbar() {
           <a href="#features" className="block px-3 py-2 text-sm text-stone-600 hover:bg-stone-50 rounded-lg">Features</a>
           <a href="#how-it-works" className="block px-3 py-2 text-sm text-stone-600 hover:bg-stone-50 rounded-lg">How it works</a>
           <div className="pt-2 border-t border-stone-100 flex flex-col gap-2">
-            <Link href="/login" className="block px-3 py-2 text-sm font-medium text-center text-stone-700 border border-stone-200 rounded-lg hover:bg-stone-50">
-              Log in
-            </Link>
-            <Link href="/signup" className="block px-3 py-2 text-sm font-medium text-center text-white bg-amber-500 hover:bg-amber-600 rounded-lg">
-              Get started
-            </Link>
+            <a href="#analyzer" onClick={() => setMenuOpen(false)} className="block px-3 py-2 text-sm font-medium text-center text-white bg-amber-500 hover:bg-amber-600 rounded-lg">
+              Analyze Resume
+            </a>
           </div>
         </div>
       )}

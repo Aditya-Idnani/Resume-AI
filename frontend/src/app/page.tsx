@@ -1,315 +1,313 @@
 "use client";
 
-import Link from "next/link";
+import { useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import { motion, AnimatePresence } from "framer-motion";
+import { Upload, FileText, X, ArrowRight, Loader2, Sparkles, FileSearch, AlertCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import HeroUpload from "@/components/HeroUpload";
-import TrustSection from "@/components/TrustSection";
-import ATSPreviewCard from "@/components/ATSPreviewCard";
-import JobDescriptionAnalyzer from "@/components/JobDescriptionAnalyzer";
-import {
-  FileText,
-  Target,
-  Lightbulb,
-  TrendingUp,
-  CheckCircle,
-  ArrowRight,
-  Upload,
-  Zap,
-  BarChart2,
-} from "lucide-react";
+import AnalyzerDashboard from "@/components/AnalyzerDashboard";
 
-const features = [
-  {
-    icon: Target,
-    title: "ATS Score Analysis",
-    description:
-      "Get a precise Applicant Tracking System score showing exactly how well your resume performs with automated screening software.",
-  },
-  {
-    icon: Zap,
-    title: "AI-Powered Feedback",
-    description:
-      "Receive intelligent, section-by-section feedback with actionable suggestions to strengthen every part of your resume.",
-  },
-  {
-    icon: BarChart2,
-    title: "Keyword Optimization",
-    description:
-      "Compare your resume against job descriptions to identify missing keywords and increase your match rate.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Bullet Point Rewriter",
-    description:
-      "Transform weak, generic bullet points into compelling, quantified achievements with AI-powered rewrites.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Score History",
-    description:
-      "Track your resume improvements over time and see how your ATS score improves with each revision.",
-  },
-  {
-    icon: FileText,
-    title: "PDF and DOCX Support",
-    description:
-      "Upload your resume in any common format. Our system parses and analyzes both PDF and Word documents accurately.",
-  },
-];
+export default function AppHome() {
+  const [file, setFile] = useState<File | null>(null);
+  const [jobDescription, setJobDescription] = useState("");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
 
-const steps = [
-  {
-    step: "01",
-    title: "Upload your resume",
-    description:
-      "Drag and drop your PDF or DOCX resume. Our parser extracts content with high precision.",
-  },
-  {
-    step: "02",
-    title: "AI analyzes it",
-    description:
-      "Our AI reviews your resume structure, language, keywords, and formatting against industry standards.",
-  },
-  {
-    step: "03",
-    title: "Get your ATS score",
-    description:
-      "Receive a detailed score breakdown with specific feedback for each section of your resume.",
-  },
-  {
-    step: "04",
-    title: "Improve and repeat",
-    description:
-      "Apply the suggestions, re-upload, and track how your score improves over time.",
-  },
-];
+  const onDrop = useCallback((accepted: File[]) => {
+    if (accepted[0]) {
+      setFile(accepted[0]);
+      setError(null);
+    }
+  }, []);
 
-export default function LandingPage() {
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      "application/pdf": [".pdf"],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+    },
+    maxFiles: 1,
+    maxSize: 10 * 1024 * 1024,
+  });
+
+  const handleAnalyze = async () => {
+    if (!file) return;
+
+    setIsAnalyzing(true);
+    setError(null);
+    setAnalysisResult(null);
+
+    const formData = new FormData();
+    formData.append("resume", file);
+    if (jobDescription.trim()) {
+      formData.append("jobDescription", jobDescription);
+    }
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050/api";
+      const response = await fetch(`${apiUrl}/analyze`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Analysis failed. Please try again.");
+      }
+
+      const data = await response.json();
+      setAnalysisResult(data.analysis);
+      
+      // Scroll to top smoothly so the results are fully visible
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const handleReset = () => {
+    setFile(null);
+    setJobDescription("");
+    setAnalysisResult(null);
+    setError(null);
+  };
+
   return (
-    <div className="min-h-screen bg-[#FAFAF8]">
+    <div className="min-h-screen bg-stone-950 text-stone-100 selection:bg-amber-500/30">
       <Navbar />
 
-      {/* Hero */}
-      <section className="pt-32 pb-20 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-full text-xs font-medium text-amber-700 mb-6">
-            <span className="w-1.5 h-1.5 bg-amber-500 rounded-full" />
-            AI-powered resume optimization
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-stone-900 leading-tight tracking-tight mb-6">
-            Know exactly why your{" "}
-            <span className="text-amber-500">resume gets rejected</span>
-          </h1>
-
-          <p className="text-lg text-stone-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Over 75% of resumes are filtered out by ATS before a human reads them.
-            Our AI analyzes your resume, gives you an ATS score, and shows you
-            exactly what to fix.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/signup"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl shadow-sm text-sm"
-            >
-              Analyze your resume
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/login"
-              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-white border border-stone-200 text-stone-700 font-medium rounded-xl hover:bg-stone-50 text-sm"
-            >
-              Sign in to your account
-            </Link>
-          </div>
-
-          <p className="mt-6 text-xs text-stone-400">
-            Free to use · No credit card required · Instant results
-          </p>
+      <main className="pt-32 pb-20 px-4 sm:px-6 relative overflow-hidden">
+        {/* Background Gradients */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full pointer-events-none">
+          <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-500/10 blur-[120px] rounded-full mix-blend-screen" />
+          <div className="absolute top-40 left-1/4 w-[400px] h-[400px] bg-blue-500/10 blur-[100px] rounded-full mix-blend-screen" />
         </div>
 
-        {/* Hero upload widget */}
-        <div className="max-w-2xl mx-auto mt-12">
-          <HeroUpload />
-        </div>
-
-        {/* ATS preview demo */}
-        <div className="max-w-3xl mx-auto mt-10">
-          <ATSPreviewCard />
-        </div>
-      </section>
-
-      <TrustSection />
-
-      {/* ATS explanation */}
-      <section
-        className="py-20 px-4 sm:px-6 bg-white border-y border-stone-100"
-        id="how-it-works"
-      >
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-xs font-semibold text-amber-600 uppercase tracking-widest mb-3">
-                Why it matters
-              </p>
-              <h2 className="text-3xl font-bold text-stone-900 leading-tight mb-5">
-                What is ATS and why does your score matter?
-              </h2>
-              <p className="text-stone-500 leading-relaxed mb-5">
-                An Applicant Tracking System (ATS) is software used by 99% of
-                Fortune 500 companies to automatically screen, rank, and filter
-                applications before any human sees them.
-              </p>
-              <p className="text-stone-500 leading-relaxed">
-                Resumes are ranked on keyword matches, formatting, and structure.
-                A low ATS score means your resume is filtered out even if you are
-                the perfect candidate.
-              </p>
-            </div>
-            <div className="space-y-3">
-              {[
-                "75% of resumes are rejected by ATS before a human reads them",
-                "Resumes with relevant keywords are 3x more likely to get interviews",
-                "Simple formatting changes can increase your ATS score by 20+ points",
-                "Quantified achievements improve recruiter response rates significantly",
-              ].map((fact) => (
-                <div
-                  key={fact}
-                  className="flex items-start gap-3 p-4 bg-amber-50 rounded-xl border border-amber-100"
-                >
-                  <CheckCircle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
-                  <p className="text-sm text-stone-700">{fact}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-20 px-4 sm:px-6" id="features">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold text-amber-600 uppercase tracking-widest mb-3">
-              Features
-            </p>
-            <h2 className="text-3xl font-bold text-stone-900">
-              Everything you need to get hired
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {features.map((f) => {
-              const Icon = f.icon;
-              return (
-                <div
-                  key={f.title}
-                  className="bg-white rounded-xl p-6 border border-stone-200 hover:border-amber-200 hover:shadow-sm transition-all group"
-                >
-                  <div className="w-9 h-9 bg-amber-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-amber-100 transition-colors">
-                    <Icon className="w-[18px] h-[18px] text-amber-600" />
+        <div className="max-w-5xl mx-auto relative z-10">
+          <AnimatePresence mode="wait">
+            {!analysisResult ? (
+              <motion.div
+                key="upload-view"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="max-w-3xl mx-auto"
+              >
+                <div className="text-center mb-12">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 border border-amber-500/20 rounded-full text-xs font-medium text-amber-400 mb-6">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    Ultra Premium ATS Analyzer
                   </div>
-                  <h3 className="font-semibold text-stone-900 mb-2 text-sm">
-                    {f.title}
-                  </h3>
-                  <p className="text-sm text-stone-500 leading-relaxed">
-                    {f.description}
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight tracking-tight mb-6 text-white">
+                    Drop your resume.<br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
+                      Get hired faster.
+                    </span>
+                  </h1>
+                  <p className="text-lg text-stone-400 max-w-xl mx-auto">
+                    Instantly analyze your resume against ATS algorithms. Find missing keywords, fix formatting, and beat the bots.
                   </p>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
-      {/* Process */}
-      <section className="py-20 px-4 sm:px-6 bg-white border-t border-stone-100">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold text-amber-600 uppercase tracking-widest mb-3">
-              Process
-            </p>
-            <h2 className="text-3xl font-bold text-stone-900">How it works</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {steps.map((step) => (
-              <div key={step.step}>
-                <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center mb-4">
-                  <span className="text-xs font-bold text-white">
-                    {step.step}
-                  </span>
+                <div className="bg-stone-900/50 backdrop-blur-xl border border-stone-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
+                  {/* Dropzone */}
+                  {!file ? (
+                    <div
+                      {...getRootProps()}
+                      className={`border-2 border-dashed rounded-2xl px-6 py-12 text-center cursor-pointer transition-all ${
+                        isDragActive
+                          ? "border-amber-400 bg-amber-500/5"
+                          : "border-stone-700 hover:border-amber-500/50 hover:bg-stone-800/50"
+                      }`}
+                    >
+                      <input {...getInputProps()} />
+                      <div className="w-16 h-16 bg-stone-800 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner">
+                        <Upload className="w-8 h-8 text-amber-500" />
+                      </div>
+                      <p className="text-lg font-semibold text-white mb-2">
+                        {isDragActive ? "Drop your resume here" : "Drag & drop your resume"}
+                      </p>
+                      <p className="text-sm text-stone-400 mb-4">or click to browse from your computer</p>
+                      <div className="inline-flex items-center gap-2 text-xs font-medium text-stone-500 bg-stone-950 rounded-lg px-3 py-1.5 border border-stone-800">
+                        <FileText className="w-3.5 h-3.5" />
+                        PDF or DOCX (Max 10MB)
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-4 p-5 bg-stone-800/50 rounded-2xl border border-stone-700">
+                        <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <FileText className="w-6 h-6 text-amber-500" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-base font-medium text-white truncate">{file.name}</p>
+                          <p className="text-sm text-stone-400">{(file.size / 1024).toFixed(1)} KB</p>
+                        </div>
+                        <button
+                          onClick={() => setFile(null)}
+                          className="p-2 rounded-xl text-stone-400 hover:bg-stone-700 hover:text-white transition-colors"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                      {/* Optional Job Description */}
+                      <div className="space-y-3">
+                        <label className="flex items-center gap-2 text-sm font-medium text-stone-300">
+                          <FileSearch className="w-4 h-4 text-stone-400" />
+                          Job Description (Optional)
+                        </label>
+                        <textarea
+                          value={jobDescription}
+                          onChange={(e) => setJobDescription(e.target.value)}
+                          placeholder="Paste the job description here for tailored keyword analysis..."
+                          className="w-full h-32 bg-stone-950 border border-stone-800 rounded-xl p-4 text-sm text-stone-300 placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 resize-none transition-all"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {error && (
+                    <div className="mt-6 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-sm text-rose-400 flex items-center gap-3">
+                      <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                      {error}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={handleAnalyze}
+                    disabled={!file || isAnalyzing}
+                    className="mt-6 w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none text-white font-bold rounded-xl text-lg shadow-xl shadow-amber-500/20 transition-all"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <Loader2 className="w-6 h-6 animate-spin" />
+                        Analyzing via AI...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-6 h-6" />
+                        Analyze Resume
+                      </>
+                    )}
+                  </button>
                 </div>
-                <h3 className="font-semibold text-stone-900 mb-2 text-sm">
-                  {step.title}
-                </h3>
-                <p className="text-sm text-stone-500 leading-relaxed">
-                  {step.description}
-                </p>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="results-view"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              >
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-3xl font-bold text-white">Analysis Results</h2>
+                  <button
+                    onClick={handleReset}
+                    className="flex items-center gap-2 px-4 py-2 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-lg text-sm font-medium transition-colors"
+                  >
+                    <ArrowRight className="w-4 h-4 rotate-180" />
+                    Analyze Another
+                  </button>
+                </div>
+                
+                {/* We use a wrapper with light theme text for the Dashboard since the dashboard is designed for a light theme, or we can just render it. Let's wrap it in a div that overrides text colors to look great. */}
+                <div className="text-stone-900 bg-[#FAFAF8] rounded-[2.5rem] p-4 sm:p-8 shadow-2xl">
+                   <AnalyzerDashboard data={analysisResult} />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* --- DEMO RESUME SECTION --- */}
+        <section className="max-w-5xl mx-auto mt-32 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">See how we spot mistakes</h2>
+            <p className="text-stone-400 max-w-2xl mx-auto">
+              Our AI acts like a recruiter, instantly highlighting weak bullet points, bad formatting, and missing keywords that get you rejected.
+            </p>
+          </div>
+
+          <div className="bg-stone-900 border border-stone-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 blur-[80px] rounded-full mix-blend-screen pointer-events-none" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+              {/* Fake Resume */}
+              <div className="bg-[#FAFAF8] rounded-xl p-6 shadow-inner text-stone-900 text-xs sm:text-sm transform rotate-[-2deg] transition-transform hover:rotate-0 duration-500">
+                <div className="font-bold text-lg mb-1 border-b-2 border-stone-800 pb-2">John Doe</div>
+                <div className="mb-4 text-stone-600">Software Engineer | San Francisco, CA</div>
+                
+                <div className="font-semibold text-sm mb-2 text-stone-800 border-b border-stone-300 pb-1">Experience</div>
+                <div className="mb-3 relative group">
+                  <div className="font-bold">Tech Corp - Developer</div>
+                  <div className="italic text-stone-500 mb-1">Jan 2020 - Present</div>
+                  <ul className="list-disc pl-4 space-y-1 text-stone-700">
+                    <li className="relative">
+                      Developed a new feature for the website.
+                      {/* Mistake Tooltip */}
+                      <div className="absolute left-0 -top-10 hidden group-hover:block bg-rose-500 text-white p-2 rounded shadow-lg text-xs font-bold w-48 z-10">
+                        Too vague! Add metrics and specific technologies used.
+                      </div>
+                      <span className="inline-block w-2 h-2 bg-rose-500 rounded-full ml-2 animate-pulse" />
+                    </li>
+                    <li>Attended daily meetings and wrote code.</li>
+                    <li>Helped the team launch a product.</li>
+                  </ul>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Job Description Analyzer */}
-      <section className="py-20 px-4 sm:px-6 bg-white border-t border-stone-100">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <p className="text-xs font-semibold text-amber-600 uppercase tracking-widest mb-3">
-              Job Match
-            </p>
-            <h2 className="text-3xl font-bold text-stone-900">
-              See how your resume matches a job posting
-            </h2>
-            <p className="text-stone-500 mt-3 text-sm max-w-xl mx-auto">
-              Paste any job description and instantly see which keywords you have, which you\'re missing, and what to add.
-            </p>
-          </div>
-          <JobDescriptionAnalyzer />
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl p-12">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-6">
-              <Upload className="w-6 h-6 text-white" />
+              {/* AI Feedback View */}
+              <div className="space-y-6">
+                <div className="bg-stone-800/50 rounded-2xl p-6 border border-stone-700">
+                  <div className="flex items-center gap-3 mb-3 text-rose-400 font-bold">
+                    <AlertCircle className="w-5 h-5" />
+                    Weak Bullet Point Detected
+                  </div>
+                  <p className="text-stone-300 text-sm mb-4 line-through decoration-rose-500/50">
+                    "Developed a new feature for the website."
+                  </p>
+                  <div className="flex items-center gap-2 text-emerald-400 font-bold mb-2">
+                    <Sparkles className="w-4 h-4" />
+                    AI Suggestion
+                  </div>
+                  <p className="text-white text-sm bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg">
+                    "Architected and deployed a scalable payment microservice using Node.js and React, increasing transaction success rate by 15% and generating $50k in new monthly revenue."
+                  </p>
+                </div>
+              </div>
             </div>
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Ready to fix your resume?
-            </h2>
-            <p className="text-amber-100 mb-8 leading-relaxed">
-              Join thousands of job seekers who have improved their ATS score and
-              landed more interviews.
-            </p>
-            <Link
-              href="/signup"
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-amber-600 font-semibold rounded-xl hover:bg-amber-50 transition-colors text-sm shadow-sm"
-            >
-              Get started for free
-              <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Footer */}
-      <footer className="border-t border-stone-200 py-8 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-amber-500 rounded flex items-center justify-center">
-              <FileText className="w-3 h-3 text-white" />
-            </div>
-            <span className="text-sm font-semibold text-stone-900">
-              ResumeAI
-            </span>
-          </div>
-          <p className="text-xs text-stone-400">
-            2026 ResumeAI. Built for job seekers.
+        {/* --- COMPANY LOGOS SECTION --- */}
+        <section className="max-w-5xl mx-auto mt-32 text-center relative z-10">
+          <p className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-8">
+            Apply to your dream company with confidence
           </p>
-        </div>
-      </footer>
+          <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-16 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
+            {/* Using text logos as placeholders for premium feel */}
+            <div className="text-2xl font-black tracking-tighter text-white">Google</div>
+            <div className="text-2xl font-bold tracking-tight text-white flex items-center gap-1">
+              <span className="text-[#0081f1]">meta</span>
+            </div>
+            <div className="text-2xl font-bold italic text-white">amazon</div>
+            <div className="text-2xl font-semibold tracking-wider text-white border-2 border-white px-2">NETFLIX</div>
+            <div className="text-2xl font-bold text-white flex items-center gap-1">
+              <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
+                <div className="w-2.5 h-2.5 bg-black rounded-full" />
+              </div>
+              Apple
+            </div>
+          </div>
+          <p className="mt-12 text-stone-400 max-w-xl mx-auto text-sm">
+            We will help you increase your ATS score and provide actionable feedback on exactly where to improve, so your resume never gets filtered out again.
+          </p>
+        </section>
+
+      </main>
     </div>
   );
 }
