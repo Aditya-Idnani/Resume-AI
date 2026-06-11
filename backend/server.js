@@ -20,5 +20,8 @@ app.get("/", (req, res) => {
 });
 
 // ✅ Start server
-const PORT = 5050;
-app.listen(PORT);
+const PORT = process.env.PORT || 5050;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
