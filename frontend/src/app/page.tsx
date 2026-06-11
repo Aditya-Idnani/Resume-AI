@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload, FileText, X, ArrowRight, Loader2, Sparkles, FileSearch, AlertCircle } from "lucide-react";
+import { Upload, FileText, X, ArrowRight, Loader2, Sparkles, FileSearch, AlertCircle, Target } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import AnalyzerDashboard from "@/components/AnalyzerDashboard";
 
