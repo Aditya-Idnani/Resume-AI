@@ -45,8 +45,13 @@ export default function AppHome() {
     }
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050/api";
-      const response = await fetch(`${apiUrl}/analyze`, {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050";
+      // Ensure baseUrl doesn't end with a slash, and always append /api/analyze
+      const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+      // If the baseUrl already includes /api, don't duplicate it
+      const endpoint = normalizedBaseUrl.endsWith('/api') ? '/analyze' : '/api/analyze';
+      
+      const response = await fetch(`${normalizedBaseUrl}${endpoint}`, {
         method: "POST",
         body: formData,
       });
