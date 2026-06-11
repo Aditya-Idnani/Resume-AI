@@ -367,20 +367,32 @@ export default function AppHome() {
           <p className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-8">
             Apply to your dream company with confidence
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-16 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
-            {/* Using text logos as placeholders for premium feel */}
-            <div className="text-2xl font-black tracking-tighter text-white">Google</div>
-            <div className="text-2xl font-bold tracking-tight text-white flex items-center gap-1">
-              <span className="text-[#0081f1]">meta</span>
-            </div>
-            <div className="text-2xl font-bold italic text-white">amazon</div>
-            <div className="text-2xl font-semibold tracking-wider text-white border-2 border-white px-2">NETFLIX</div>
-            <div className="text-2xl font-bold text-white flex items-center gap-1">
-              <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
-                <div className="w-2.5 h-2.5 bg-black rounded-full" />
-              </div>
-              Apple
-            </div>
+          <div className="flex flex-wrap justify-center items-center gap-10 sm:gap-16">
+            <img 
+              src="/logos/google.jpg" 
+              alt="Google" 
+              className="h-8 md:h-10 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
+            />
+            <img 
+              src="/logos/meta.jpeg" 
+              alt="Meta" 
+              className="h-8 md:h-10 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
+            />
+            <img 
+              src="/logos/amazon.jpg" 
+              alt="Amazon" 
+              className="h-8 md:h-10 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
+            />
+            <img 
+              src="/logos/netflix.webp" 
+              alt="Netflix" 
+              className="h-8 md:h-10 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
+            />
+            <img 
+              src="/logos/apple.png" 
+              alt="Apple" 
+              className="h-8 md:h-10 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
+            />
           </div>
           <p className="mt-12 text-stone-400 max-w-xl mx-auto text-sm">
             We will help you increase your ATS score and provide actionable feedback on exactly where to improve, so your resume never gets filtered out again.
