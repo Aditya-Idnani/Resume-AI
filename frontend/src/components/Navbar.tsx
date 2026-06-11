@@ -12,14 +12,14 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <a href="/" className="flex items-center gap-2 group">
             <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
               <FileText className="w-4 h-4 text-white" />
             </div>
             <span className="font-semibold text-stone-900 text-sm tracking-tight">
               ResumeAI
             </span>
-          </Link>
+          </a>
 
           {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-1">
