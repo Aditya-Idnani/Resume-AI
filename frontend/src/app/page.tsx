@@ -57,7 +57,14 @@ export default function AppHome() {
       });
 
       if (!response.ok) {
-        throw new Error("Analysis failed. Please try again.");
+        let serverError = "Analysis failed. Please try again.";
+        try {
+          const errorData = await response.json();
+          serverError = errorData.error || serverError;
+        } catch(e) {
+          serverError = await response.text();
+        }
+        throw new Error(`Server error (${response.status}): ${serverError}`);
       }
 
       const data = await response.json();
@@ -229,7 +236,7 @@ export default function AppHome() {
         </div>
 
         {/* --- DEMO RESUME SECTION --- */}
-        <section className="max-w-5xl mx-auto mt-32 relative z-10">
+        <section id="demo" className="max-w-5xl mx-auto mt-32 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">See how we spot mistakes</h2>
             <p className="text-stone-400 max-w-2xl mx-auto">
@@ -283,6 +290,74 @@ export default function AppHome() {
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* --- FEATURES SECTION --- */}
+        <section id="features" className="max-w-5xl mx-auto mt-32 relative z-10 scroll-mt-24">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Everything you need to get hired</h2>
+            <p className="text-stone-400 max-w-2xl mx-auto">
+              Our analyzer breaks down every aspect of your resume to ensure it passes through Applicant Tracking Systems.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-stone-900/50 border border-stone-800 rounded-2xl p-8 hover:bg-stone-800 transition-colors">
+              <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center mb-6">
+                <Target className="w-6 h-6 text-amber-500" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">ATS Scoring</h3>
+              <p className="text-stone-400 text-sm leading-relaxed">Get a precise score showing exactly how your resume performs against automated screening software.</p>
+            </div>
+            <div className="bg-stone-900/50 border border-stone-800 rounded-2xl p-8 hover:bg-stone-800 transition-colors">
+              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6">
+                <FileSearch className="w-6 h-6 text-blue-500" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Keyword Matching</h3>
+              <p className="text-stone-400 text-sm leading-relaxed">Compare your resume against any job description to instantly find missing keywords you need to add.</p>
+            </div>
+            <div className="bg-stone-900/50 border border-stone-800 rounded-2xl p-8 hover:bg-stone-800 transition-colors">
+              <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-6">
+                <Sparkles className="w-6 h-6 text-emerald-500" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">AI Suggestions</h3>
+              <p className="text-stone-400 text-sm leading-relaxed">Transform weak, generic bullet points into compelling, quantified achievements with AI rewrites.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* --- HOW IT WORKS SECTION --- */}
+        <section id="how-it-works" className="max-w-5xl mx-auto mt-32 relative z-10 scroll-mt-24">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">How it works</h2>
+            <p className="text-stone-400 max-w-2xl mx-auto">
+              Get your resume analyzed and improved in three simple steps.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-stone-900 border border-stone-800 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                <span className="text-xl font-bold text-amber-500">1</span>
+                <div className="absolute top-1/2 left-full w-full h-px bg-stone-800 hidden md:block" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">Upload Resume</h3>
+              <p className="text-stone-400 text-sm">Drag and drop your PDF or DOCX file. Optional: paste the job description.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-stone-900 border border-stone-800 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                <span className="text-xl font-bold text-amber-500">2</span>
+                <div className="absolute top-1/2 left-full w-full h-px bg-stone-800 hidden md:block" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">AI Analyzes</h3>
+              <p className="text-stone-400 text-sm">Our system scans for keywords, formatting, and impactful bullet points.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-stone-900 border border-stone-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-xl font-bold text-amber-500">3</span>
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">Get Results</h3>
+              <p className="text-stone-400 text-sm">Review your ATS score, apply the feedback, and land more interviews.</p>
             </div>
           </div>
         </section>
