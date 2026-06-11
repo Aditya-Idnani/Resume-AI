@@ -367,31 +367,31 @@ export default function AppHome() {
           <p className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-8">
             Apply to your dream company with confidence
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-10 sm:gap-16">
+          <div className="flex flex-wrap justify-between items-center w-full gap-8 sm:gap-10">
             <img 
               src="/logos/google.jpg" 
               alt="Google" 
-              className="h-8 md:h-10 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
+              className="h-10 sm:h-14 md:h-16 lg:h-20 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
             />
             <img 
               src="/logos/meta.jpeg" 
               alt="Meta" 
-              className="h-8 md:h-10 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
+              className="h-10 sm:h-14 md:h-16 lg:h-20 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
             />
             <img 
               src="/logos/amazon.jpg" 
               alt="Amazon" 
-              className="h-8 md:h-10 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
+              className="h-10 sm:h-14 md:h-16 lg:h-20 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
             />
             <img 
               src="/logos/netflix.webp" 
               alt="Netflix" 
-              className="h-8 md:h-10 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
+              className="h-10 sm:h-14 md:h-16 lg:h-20 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
             />
             <img 
               src="/logos/apple.png" 
               alt="Apple" 
-              className="h-8 md:h-10 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
+              className="h-10 sm:h-14 md:h-16 lg:h-20 w-auto object-contain grayscale invert mix-blend-screen opacity-50 hover:opacity-100 transition-all duration-500" 
             />
           </div>
           <p className="mt-12 text-stone-400 max-w-xl mx-auto text-sm">
